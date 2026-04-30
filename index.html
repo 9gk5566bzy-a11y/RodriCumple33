@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Operación Cumpleaños</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #020617;
+    color: #e2e8f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+  }
+
+  h1 {
+    background: linear-gradient(to right, #34d399, #22d3ee);
+    -webkit-background-clip: text;
+    color: transparent;
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .box {
+    background: #0f172a;
+    padding: 20px;
+    border-radius: 20px;
+    max-width: 500px;
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .item {
+    background: #1e293b;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+  }
+
+  input {
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #334155;
+    background: #020617;
+    color: white;
+    text-align: center;
+    text-transform: uppercase;
+  }
+
+  button {
+    padding: 8px 10px;
+    border: none;
+    border-radius: 8px;
+    background: #334155;
+    color: white;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background: #06b6d4;
+  }
+
+  .ok {
+    color: #34d399;
+  }
+
+  .error {
+    color: #ef4444;
+    margin-top: 5px;
+  }
+
+  .final {
+    text-align: center;
+  }
+
+  a {
+    display: inline-block;
+    margin-top: 20px;
+    background: #ef4444;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 999px;
+    text-decoration: none;
+  }
+</style>
+</head>
+
+<body>
+
+<h1>Operación Cumpleaños</h1>
+
+<div class="box" id="app"></div>
+
+<script>
+const CODIGOS = ["SEVILLA","HIPODROMO","PEPERONNI","EVEREST","ISMA"];
+const LINK = "https://www.youtube.com/watch?v=R-RLGi0uXD4";
+
+let estado = [false,false,false,false,false];
+
+function render() {
+  const app = document.getElementById("app");
+
+  if (estado.every(Boolean)) {
+    app.innerHTML = `
+      <div class="final">
+        <h2 class="ok">¡Pruebas superadas!</h2>
+        <p>Has desbloqueado la sorpresa 🎁</p>
+        <a href="${LINK}" target="_blank">Ver vídeo sorpresa</a>
+      </div>
+    `;
+    return;
+  }
+
+  let html = "";
+
+  CODIGOS.forEach((_, i) => {
+    html += `
+      <div class="item">
+        <strong>Prueba ${i+1}</strong><br/><br/>
+
+        ${estado[i] ? 
+          "<span class='ok'>Desbloqueado</span>" :
+          `<input id="i${i}" placeholder="CODIGO"/>
+           <button onclick="check(${i})">OK</button>
+           <div id="e${i}" class="error"></div>`
+        }
+      </div>
+    `;
+  });
+
+  app.innerHTML = html;
+}
+
+function check(i) {
+  const input = document.getElementById("i"+i).value.toUpperCase();
+
+  if (input === CODIGOS[i]) {
+    estado[i] = true;
+    render();
+  } else {
+    document.getElementById("e"+i).innerText = "Código incorrecto";
+    setTimeout(() => {
+      document.getElementById("e"+i).innerText = "";
+    }, 2000);
+  }
+}
+
+render();
+</script>
+
+</body>
+</html>
